@@ -1,6 +1,5 @@
 package com.rest;
 
-import java.util.Currency;
 import java.util.concurrent.atomic.AtomicLong;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,11 +14,9 @@ public class Controller {
 
     //Get exchange rate from Currency A to Currency B
     @RequestMapping(value="/exchange", params = {"currA", "currB"}, method=GET)
-    public Response generateResponse(@RequestParam(value="currA") String currA, @RequestParam(value="currB") String currB) throws Exception {
+    public Response generateResponseA(@RequestParam(value="currA") String currA, @RequestParam(value="currB") String currB) throws Exception {
 
-        System.out.println(CurrencyOps.exchangeCurrAtoCurrB(currA, currB));
-
-
+        CurrencyOps.exchangeCurrAtoCurrB(currA, currB);
 
         return new Response(counter.incrementAndGet(),
                 String.format(template, currB));
@@ -27,21 +24,27 @@ public class Controller {
 
     //Get all exchange rates from Currency A
     @RequestMapping(value="/exchange", params = {"currA"}, method=GET)
-    public Response generateResponse2(@RequestParam(value="currA") String currA) {
+    public Response generateResponseB(@RequestParam(value="currA") String currA) throws Exception {
+
+        CurrencyOps.exchangeAllCurrA(currA);
+
         return new Response(counter.incrementAndGet(),
                 String.format(template, currA));
     }
 
     //Get value conversion from Currency A to Currency B
     @RequestMapping(value="/convert", params = {"currA", "currB", "value"}, method=GET)
-    public Response generateResponse3(@RequestParam(value="currA") String currA,  @RequestParam(value="currB") String currB, @RequestParam(value="value") String value) {
+    public Response generateResponseC(@RequestParam(value="currA") String currA,  @RequestParam(value="currB") String currB, @RequestParam(value="value") double value) throws Exception {
+
+        CurrencyOps.convertCurrAtoCurrB(currA, currB, value);
+
         return new Response(counter.incrementAndGet(),
                 String.format(template, value));
     }
 
     /*//Get value conversion from Currency A to a list of supplied currencies
     @RequestMapping(value="/convert", params = {"currA", "currB", "value"}, method=GET)
-    public Response greeting4(@RequestParam(value="name", defaultValue="World") String name) {
+    public Response generateResponseD(@RequestParam(value="name", defaultValue="World") String name) {
         return new Response(counter.incrementAndGet(),
                 String.format(template, name));
     }*/

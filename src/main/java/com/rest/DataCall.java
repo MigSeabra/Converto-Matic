@@ -11,6 +11,8 @@ public class DataCall {
     //Returns all available exchange rates from Currency A and stores them in Mongodb
     public static JSONObject fetchAllCurrA(String currA) throws Exception {
 
+
+
         URL url = new URL("http://data.fixer.io/api/latest?access_key=bdbc04ad865f07ba4e6f36a796d5d4b5&base=" + currA + "&symbols=&format=1");
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
