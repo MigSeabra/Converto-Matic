@@ -2,16 +2,16 @@ package com.rest;
 
 public class Response {
 
-    private final long id;
+    private final int responseCode;
     private final String content;
 
-    public Response(long id, String content) {
-        this.id = id;
+    public Response(int responseCode, String content) {
+        this.responseCode = responseCode;
         this.content = content;
     }
 
-    public long getId() {
-        return id;
+    public int getResponseCode() {
+        return responseCode;
     }
 
     public String getContent() {
