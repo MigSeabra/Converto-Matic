@@ -60,6 +60,9 @@ public class Controller {
         String currA = customQuery.get("currA");
         double value = Double.parseDouble(customQuery.get("value"));
 
+        if(currA == null || value <= 0)
+            throw new IllegalArgumentException("Missing request parameters");
+
         JSONObject data = DataCall.fetchAllCurrA(currA);
 
         //Only a maximum of 10 currencies are allowed in the request (currA, ... , currK)
