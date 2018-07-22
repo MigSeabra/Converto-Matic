@@ -33,6 +33,8 @@ public class DataCall {
         return obj;
     }
 
+    //If more mongodb operations are needed then insert these methods in a new class
+
     private static JSONObject checkCacheData(String URL, String currA) {
 
         MongoClientURI uri  = new MongoClientURI(URL);

@@ -31,7 +31,7 @@ public class Controller {
 
         JSONObject data = DataCall.fetchAllCurrA(currA).getJSONObject("rates");
 
-        Map<String, Double> result = new HashMap<String,Double>();
+        SortedMap<String, Double> result = new TreeMap<>();
 
         Set<String> keys = data.keySet();
 
