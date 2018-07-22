@@ -24,3 +24,8 @@ Get value convertion from currency A to a list of supplied currencies (maximum 1
 ```
 GET http://[webserviceIP]:[webservicePort]/convert?currA=EUR&currB=USD&currC=YEN&currD=FRC&currE=RUP&value=2 
 ```
+### API Documentation
+
+https://app.swaggerhub.com/apis/MigSeabra/Converto-Matic/1.0.0
+
+
