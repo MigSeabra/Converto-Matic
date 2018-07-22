@@ -10,7 +10,7 @@ mvnw spring-boot:run
 ```
 ### How to Use the REST WebService
 
-Then the following endpoints are available for exchange-rates and money convertions:
+The following endpoints are available for exchange-rates and money convertions:
 
 Get exchange rate from currency A to currency B:
 ```
