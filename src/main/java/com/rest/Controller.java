@@ -1,6 +1,10 @@
 package com.rest;
 
+import java.util.*;
+
 import org.json.JSONObject;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,41 +15,59 @@ public class Controller {
 
     //Get exchange rate from Currency A to Currency B
     @RequestMapping(value="/exchange", params = {"currA", "currB"}, method=GET)
-    public Response generateResponseA(@RequestParam(value="currA") String currA, @RequestParam(value="currB") String currB) throws Exception {
+    public ResponseEntity<Object> generateResponseA(@RequestParam(value="currA") String currA, @RequestParam(value="currB") String currB) throws Exception {
 
         JSONObject data = DataCall.fetchAllCurrA(currA);
 
-        double num = data.getJSONObject("rates").getDouble(currB);
+        Map<String, Double> result = new HashMap<String,Double>();
+        result.put(currB,data.getJSONObject("rates").getDouble(currB));
 
-
-        return new Response(0, "asd");
+        return new ResponseEntity<Object>(result, HttpStatus.OK);
     }
 
     //Get all exchange rates from Currency A
     @RequestMapping(value="/exchange", params = {"currA"}, method=GET)
-    public Response generateResponseB(@RequestParam(value="currA") String currA) throws Exception {
+    public ResponseEntity<Object> generateResponseB(@RequestParam(value="currA") String currA) throws Exception {
 
-        JSONObject data = DataCall.fetchAllCurrA(currA);
+        JSONObject data = DataCall.fetchAllCurrA(currA).getJSONObject("rates");
 
-        String asd = data.getJSONObject("rates").toString();
+        Map<String, Double> result = new HashMap<String,Double>();
 
-        return new Response(0, "asd");
+        Set<String> keys = data.keySet();
+
+        for(String key : keys)
+            result.put(key, data.getDouble(key));
+
+        return new ResponseEntity<Object>(result, HttpStatus.OK);
     }
 
     //Get value conversion from Currency A to Currency B
-    @RequestMapping(value="/convert", params = {"currA", "currB", "value"}, method=GET)
-    public Response generateResponseC(@RequestParam(value="currA") String currA,  @RequestParam(value="currB") String currB, @RequestParam(value="value") double value) throws Exception {
+    //This endpoint is redundant - use the following one
+//    @RequestMapping(value="/convert", params = {"currA", "currB", "value"}, method=GET)
+//    public ResponseEntity<Object> generateResponseC(@RequestParam(value="currA") String currA,  @RequestParam(value="currB") String currB, @RequestParam(value="value") double value) throws Exception {
+//
+//        JSONObject data = DataCall.fetchAllCurrA(currA);
+//
+//        return new ResponseEntity<Object>("{\"converted\":" + value*data.getJSONObject("rates").getDouble(currB) + "}", HttpStatus.OK);
+//    }
+
+    //Get value conversion from Currency A to a list of supplied currencies
+    @RequestMapping(value="/convert", method=GET)
+    public ResponseEntity<Object> generateResponseD(@RequestParam Map<String, String> customQuery) throws Exception {
+
+        Map<String, Double> result = new HashMap<String,Double>();
+
+        String currA = customQuery.get("currA");
+        double value = Double.parseDouble(customQuery.get("value"));
 
         JSONObject data = DataCall.fetchAllCurrA(currA);
 
-        double asd = value*data.getJSONObject("rates").getDouble(currB);
+        //Only a maximum of 10 currencies are allowed in request
+        for (char alpha = 'B'; alpha <= 'K'; alpha++) {
+            if(customQuery.get("curr" + alpha) != null)
+                result.put("curr" + alpha,value*data.getJSONObject("rates").getDouble(customQuery.get("curr" + alpha)));
+        }
 
-        return new Response(0, "asd");
-    }
-
-    //Get value conversion from Currency A to a list of supplied currencies
-    @RequestMapping(value="/convert", params = {"currA", "currB", "value"}, method=GET)
-    public Response generateResponseD(@RequestParam(value="currA") String currA) {
-        return new Response(0, "asd");
+        return new ResponseEntity<Object>(result, HttpStatus.OK);
     }
 }
