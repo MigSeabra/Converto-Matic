@@ -17,6 +17,9 @@ public class Controller {
     @RequestMapping(value="/exchange", params = {"currA", "currB"}, method=GET)
     public ResponseEntity<Object> generateResponseA(@RequestParam(value="currA") String currA, @RequestParam(value="currB") String currB) throws Exception {
 
+        if(currA.isEmpty() || currB.isEmpty())
+            throw new IllegalArgumentException("Missing request parameters");
+
         JSONObject data = DataCall.fetchAllCurrA(currA);
 
         Map<String, Double> result = new HashMap<>();
@@ -28,6 +31,9 @@ public class Controller {
     //Get all exchange rates from Currency A
     @RequestMapping(value="/exchange", params = {"currA"}, method=GET)
     public ResponseEntity<Object> generateResponseB(@RequestParam(value="currA") String currA) throws Exception {
+
+        if(currA.isEmpty())
+            throw new IllegalArgumentException("Missing request parameters");
 
         JSONObject data = DataCall.fetchAllCurrA(currA).getJSONObject("rates");
 
