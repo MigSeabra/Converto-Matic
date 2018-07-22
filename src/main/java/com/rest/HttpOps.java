@@ -9,6 +9,7 @@ import java.net.URL;
 
 public class HttpOps {
 
+    //GET on HTTP Rest webservice
     public static JSONObject performRESTget(String URL) throws Exception {
 
         java.net.URL url = new URL(URL);

@@ -12,6 +12,7 @@ import java.util.Date;
 
 public class CacheOps {
 
+    //Check if document is present in cache - mongodb
     public static JSONObject checkCacheData(String URL, String currA) {
 
         MongoClientURI uri  = new MongoClientURI(URL);
@@ -38,6 +39,7 @@ public class CacheOps {
         return response;
     }
 
+    //Insert document in cache - mongodb
     public static void insertCacheData(String URL, JSONObject data) {
 
         MongoClientURI uri  = new MongoClientURI(URL);
@@ -46,6 +48,7 @@ public class CacheOps {
 
         MongoCollection<Document> currency = db.getCollection("currency");
 
+        //TTL index
         Document datadoc = Document.parse(data.toString()).append("createdAt", new Date());
 
         //the below index was created once on the database

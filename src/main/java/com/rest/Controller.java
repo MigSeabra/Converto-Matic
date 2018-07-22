@@ -19,10 +19,10 @@ public class Controller {
 
         JSONObject data = DataCall.fetchAllCurrA(currA);
 
-        Map<String, Double> result = new HashMap<String,Double>();
+        Map<String, Double> result = new HashMap<>();
         result.put(currB,data.getJSONObject("rates").getDouble(currB));
 
-        return new ResponseEntity<Object>(result, HttpStatus.OK);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     //Get all exchange rates from Currency A
@@ -38,7 +38,7 @@ public class Controller {
         for(String key : keys)
             result.put(key, data.getDouble(key));
 
-        return new ResponseEntity<Object>(result, HttpStatus.OK);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     //Get value conversion from Currency A to Currency B
@@ -55,19 +55,19 @@ public class Controller {
     @RequestMapping(value="/convert", method=GET)
     public ResponseEntity<Object> generateResponseD(@RequestParam Map<String, String> customQuery) throws Exception {
 
-        Map<String, Double> result = new HashMap<String,Double>();
+        Map<String, Double> result = new HashMap<>();
 
         String currA = customQuery.get("currA");
         double value = Double.parseDouble(customQuery.get("value"));
 
         JSONObject data = DataCall.fetchAllCurrA(currA);
 
-        //Only a maximum of 10 currencies are allowed in request
+        //Only a maximum of 10 currencies are allowed in the request (currA, ... , currK)
         for (char alpha = 'B'; alpha <= 'K'; alpha++) {
             if(customQuery.get("curr" + alpha) != null)
                 result.put("curr" + alpha,value*data.getJSONObject("rates").getDouble(customQuery.get("curr" + alpha)));
         }
 
-        return new ResponseEntity<Object>(result, HttpStatus.OK);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }
