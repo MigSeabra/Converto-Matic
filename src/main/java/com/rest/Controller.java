@@ -66,15 +66,16 @@ public class Controller {
         String currA = customQuery.get("currA");
         double value = Double.parseDouble(customQuery.get("value"));
 
-        if(currA.isEmpty() || value <= 0)
+        if(currA == null || currA.isEmpty() || value < 0)
             throw new IllegalArgumentException("Missing request parameters");
 
         JSONObject data = DataCall.fetchAllCurrA(currA);
 
         //Only a maximum of 10 currencies are allowed in the request (currA, ... , currK)
         for (char alpha = 'B'; alpha <= 'K'; alpha++) {
-            if(customQuery.get("curr" + alpha) != null)
-                result.put("curr" + alpha,value*data.getJSONObject("rates").getDouble(customQuery.get("curr" + alpha)));
+            String curr = customQuery.get("curr" + alpha);
+            if(curr != null)
+                result.put(curr,value*data.getJSONObject("rates").getDouble(curr));
         }
 
         return new ResponseEntity<>(result, HttpStatus.OK);
