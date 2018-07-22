@@ -55,7 +55,7 @@ public class Controller {
     @RequestMapping(value="/convert", method=GET)
     public ResponseEntity<Object> generateResponseD(@RequestParam Map<String, String> customQuery) throws Exception {
 
-        Map<String, Double> result = new HashMap<>();
+        SortedMap<String, Double> result = new TreeMap<>();
 
         String currA = customQuery.get("currA");
         double value = Double.parseDouble(customQuery.get("value"));
